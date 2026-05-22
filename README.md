@@ -1,5 +1,9 @@
 # Maintenance_OS
 
+**Live UI preview:** <https://nuthanteja.github.io/maintenance-os/> — static demo of the dashboard with synthetic predictions cycling through every severity (no backend required to view). For real inference, clone and run the FastAPI server locally.
+
+---
+
 Vibration-based predictive maintenance system for rotary machinery — backend service plus operator dashboard. Loads a trained model bundle, ingests tri-axial accelerometer data (X/Y/Z @ 50 kHz, 1024-sample windows), and classifies machine state and severity in real time. Severity outputs map to **ISO 20816-3 Action Zones** (A/B/C/D).
 
 The current shipped model is **MiniRocket + dual RidgeClassifierCV** (sktime + scikit-learn). The model layer sits behind a `Predictor` ABC so swapping in a new architecture (CNN, Transformer, etc.) requires no API changes.
