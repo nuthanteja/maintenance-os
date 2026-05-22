@@ -352,4 +352,4 @@ For production:
 
 ## Acknowledgements
 
-Built as a Student Data Science Consultant engagement for **[Machinery Monitoring Systems, LLC](https://mmsysllc.com/)**, in collaboration with the **[Institute for Artificial Intelligence and Data Science](https://www.buffalo.edu/ai-data-science.html)**, University at Buffalo.
+Built as a Student Data Science Consultant engagement for **<a href="https://mmsysllc.com/" target="_blank" rel="noopener">Machinery Monitoring Systems, LLC</a>**, in collaboration with the **<a href="https://www.buffalo.edu/ai-data-science.html" target="_blank" rel="noopener">Institute for Artificial Intelligence and Data Science</a>**, University at Buffalo.
