@@ -4,6 +4,8 @@
 
 **Project report:** [`docs/Project_report_Team_Delta.pdf`](docs/Project_report_Team_Delta.pdf) — full writeup covering system design, modelling experiments, results, and the path from notebook to deployed product.
 
+**Research notebooks:** [`docs/notebooks/`](docs/notebooks/) — Colab notebooks for data analysis, feature engineering, and modelling experiments (1D-CNN variants across sensor configurations, severity-based classification, plot-selection analysis). Each notebook has a header cell describing its purpose.
+
 ---
 
 Vibration-based predictive maintenance system for rotary machinery — backend service plus operator dashboard. Loads a trained model bundle, ingests tri-axial accelerometer data (X/Y/Z @ 50 kHz, 1024-sample windows), and classifies machine state and severity in real time. Severity outputs map to **ISO 20816-3 Action Zones** (A/B/C/D).
@@ -159,6 +161,7 @@ models/                    serialized model bundles
 
 docs/                      project documentation
   Project_report_Team_Delta.pdf    full project report (system design, experiments, results)
+  notebooks/                       Colab notebooks (modelling experiments + data analysis)
 
 tests/
   unit/                    predictor, pipeline, buffer, ISO mapping, ingestors
