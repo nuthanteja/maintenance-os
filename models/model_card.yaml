@@ -1,0 +1,42 @@
+model_id: minirocket
+version: "0.1.0"
+trained_on: severity-based vibration dataset (X/Y/Z accelerometer)
+
+input_contract:
+  tensor_shape: [3, 1024]    # [axes, samples]
+  axes: [X, Y, Z]
+  sample_rate_hz: 50000
+  preprocessing:
+    - DC removal per axis (subtract mean) — applied at sensor capture time
+    - Global max scaling (tensor / global_max)
+    - MiniRocketMultivariate transform
+    - Append normalized RPM (MinMax-scaled) to the feature vector
+
+heads:
+  state: RidgeClassifierCV
+  severity: RidgeClassifierCV
+
+# Authoritative class lists are read from the encoders inside the joblib at load time.
+# These are the classes expected from the source notebook — verify with /api/meta.
+classes:
+  state:
+    - Bearing fault
+    - Mechanical Looseness
+    - Misalignment
+    - Normal
+    - Unbalance
+  severity:
+    - baseline
+    - low
+    - medium
+    - high
+
+iso_20816_3:
+  baseline: "Zone A (Good)"
+  low: "Zone B (Acceptable)"
+  medium: "Zone C (Warning — Unsatisfactory)"
+  high: "Zone D (Alert — Unacceptable)"
+
+notes:
+  - Confidence values are derived from RidgeClassifierCV decision_function margins via softmax. Treat as a relative ranking, not a calibrated probability.
+  - Model may be swapped without API changes — implement the Predictor interface and register in pmos.models.registry.

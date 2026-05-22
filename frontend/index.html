@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maintenance_OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uplot@1.6.31/dist/uPlot.min.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">MAINTENANCE_OS</div>
+
+        <div class="asset-card">
+          <div class="asset-label">Active Asset</div>
+          <div class="asset-id" id="asset-id">—</div>
+          <div class="asset-status">
+            <span class="dot" id="asset-dot"></span>
+            <span id="asset-status-text">Initializing</span>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-item active" data-mode="batch">
+            <span class="nav-icon">📄</span>
+            <span>CSV Batch Analysis</span>
+          </button>
+          <button class="nav-item" data-mode="stream">
+            <span class="nav-icon">📡</span>
+            <span>Real-time Sensors</span>
+          </button>
+          <button class="nav-item" data-mode="history">
+            <span class="nav-icon">📋</span>
+            <span>Recent Predictions</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="meta-line">
+            <span class="meta-label">Model</span>
+            <span class="meta-value" id="meta-model">—</span>
+          </div>
+          <div class="meta-line">
+            <span class="meta-label">Ingestor</span>
+            <span class="meta-value" id="meta-ingestor">—</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="topbar-title" id="mode-title">CSV Batch Analysis</div>
+          <div class="topbar-status">
+            <span class="dot" id="conn-dot"></span>
+            <span id="conn-text">SYSTEM CONNECTED</span>
+          </div>
+        </header>
+
+        <section class="hero" id="hero">
+          <div class="hero-left">
+            <div class="hero-state" id="hero-state">AWAITING DATA</div>
+            <div class="hero-meta">
+              <span class="badge badge-neutral" id="hero-badge">—</span>
+              <span class="hero-asset" id="hero-source-wrap">Asset: <span id="hero-asset">—</span></span>
+              <span class="hero-time" id="hero-time"></span>
+            </div>
+          </div>
+          <div class="hero-right">
+            <div class="conf-block">
+              <div class="conf-label">Fault Confidence</div>
+              <div class="conf-value" id="hero-conf">—</div>
+            </div>
+            <div class="conf-block-sm">
+              <div class="conf-label-sm">Severity</div>
+              <div class="conf-value-sm" id="hero-sev-conf">—</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content">
+          <!-- BATCH MODE -->
+          <div id="batch-view" class="mode-view">
+            <div id="upload-zone" class="upload-zone">
+              <div class="upload-icon">⬆</div>
+              <div class="upload-title">Vibration Data Upload</div>
+              <div class="upload-sub">Drag &amp; drop a CSV or JSONL file, or click to browse</div>
+              <input type="file" id="upload-input" accept=".csv,.jsonl,.ndjson" hidden />
+              <div class="upload-row">
+                <label class="rpm-label">
+                  RPM
+                  <input type="number" id="upload-rpm" value="2700" min="100" max="20000" />
+                </label>
+                <button id="upload-submit" class="btn btn-primary">Analyze</button>
+              </div>
+              <div class="upload-hint">
+                CSV format: header row <code>axis,s0,...,s1023</code>, then 3 rows for X / Y / Z (1024 samples each).
+              </div>
+              <div id="upload-error" class="upload-error" hidden></div>
+            </div>
+
+            <div id="batch-results" class="plot-grid" hidden>
+              <div class="panel">
+                <div class="panel-title">
+                  <span class="panel-title-label">Time-Domain Waveform</span>
+                  <span class="panel-legend">
+                    <span class="leg leg-x">X</span>
+                    <span class="leg leg-y">Y</span>
+                    <span class="leg leg-z">Z</span>
+                  </span>
+                </div>
+                <div id="batch-time-chart" class="chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-title">
+                  <span class="panel-title-label">FFT Magnitude Spectrum</span>
+                  <span class="panel-legend">
+                    <span class="leg leg-x">X</span>
+                    <span class="leg leg-y">Y</span>
+                    <span class="leg leg-z">Z</span>
+                  </span>
+                </div>
+                <div id="batch-fft-chart" class="chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-title">
+                  <span class="panel-title-label">Envelope Spectrum (Bearing Diagnostic)</span>
+                  <span class="panel-legend">
+                    <span class="leg leg-x">X</span>
+                    <span class="leg leg-y">Y</span>
+                    <span class="leg leg-z">Z</span>
+                  </span>
+                </div>
+                <div id="batch-env-chart" class="chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-title">
+                  <span class="panel-title-label">Diagnostic Statistics</span>
+                </div>
+                <div id="batch-stats" class="stats-table"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STREAM MODE -->
+          <div id="stream-view" class="mode-view" hidden>
+            <div class="severity-timeline" title="Severity over the last ~60 seconds (oldest left → newest right)">
+              <canvas id="severity-canvas"></canvas>
+              <span class="severity-timeline-tag tag-left">earliest</span>
+              <span class="severity-timeline-tag tag-right">now</span>
+            </div>
+            <div class="stream-bar">
+              <label class="eco-toggle">
+                <span class="toggle-switch">
+                  <input type="checkbox" id="eco-toggle" />
+                  <span class="toggle-track"></span>
+                </span>
+                <span>Compute-Saver Mode (Predict-Only)</span>
+              </label>
+              <div class="stream-meta">
+                <label class="rpm-label">
+                  RPM
+                  <input type="number" id="stream-rpm" value="2700" min="100" max="20000" />
+                </label>
+                <span class="stream-rate" id="stream-rate">— pred/s</span>
+              </div>
+            </div>
+
+            <div id="stream-plots" class="plot-grid">
+              <div class="panel">
+                <div class="panel-title">
+                  <span class="panel-title-label">Time-Domain Waveform</span>
+                  <span class="panel-legend">
+                    <span class="leg leg-x">X</span>
+                    <span class="leg leg-y">Y</span>
+                    <span class="leg leg-z">Z</span>
+                  </span>
+                </div>
+                <div id="stream-time-chart" class="chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-title">
+                  <span class="panel-title-label">FFT Magnitude Spectrum</span>
+                  <span class="panel-legend">
+                    <span class="leg leg-x">X</span>
+                    <span class="leg leg-y">Y</span>
+                    <span class="leg leg-z">Z</span>
+                  </span>
+                </div>
+                <div id="stream-fft-chart" class="chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-title">
+                  <span class="panel-title-label">Envelope Spectrum (Bearing Diagnostic)</span>
+                  <span class="panel-legend">
+                    <span class="leg leg-x">X</span>
+                    <span class="leg leg-y">Y</span>
+                    <span class="leg leg-z">Z</span>
+                  </span>
+                </div>
+                <div id="stream-env-chart" class="chart"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-title">
+                  <span class="panel-title-label">Diagnostic Statistics</span>
+                </div>
+                <div id="stream-stats" class="stats-table"></div>
+              </div>
+            </div>
+
+            <div id="eco-msg" class="eco-msg" hidden>
+              <div class="eco-msg-title">Live Plotting Paused</div>
+              <div class="eco-msg-sub">Predictions continue updating in the hero readout.</div>
+            </div>
+          </div>
+
+          <!-- HISTORY MODE -->
+          <div id="history-view" class="mode-view" hidden>
+            <div class="history-page-header">
+              <div class="history-page-title">Recent Predictions</div>
+              <div class="history-page-actions">
+                <span id="history-count-label" class="history-page-count">0 entries</span>
+                <button id="history-clear" class="btn">Clear</button>
+              </div>
+            </div>
+            <div id="history-list" class="history-page-list"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/uplot@1.6.31/dist/uPlot.iife.min.js"></script>
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+.venv/
+venv/
+env/
+.python-version
+
+.env
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+.vscode/
+.idea/
+.claude/
+
+# Large/runtime artifacts — keep models/*.joblib (committed for client clone-and-run)
+data/raw/
+data/processed/
+*.pkl
+*.h5
+*.hdf5
+
+# OS
+Thumbs.db
+.DS_Store
