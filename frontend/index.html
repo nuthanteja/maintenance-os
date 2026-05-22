@@ -11,7 +11,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uplot@1.6.31/dist/uPlot.min.css" />
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
     <div class="app">
@@ -55,6 +55,13 @@
       </aside>
 
       <main class="main">
+        <div id="preview-banner" class="preview-banner" hidden>
+          <span class="preview-banner-tag">UI Preview</span>
+          <span class="preview-banner-text">
+            Static demo — predictions are synthetic. Clone the repo and run the FastAPI backend for real model inference.
+          </span>
+          <a href="https://github.com/nuthanteja/maintenance-os" target="_blank" rel="noopener">View source ↗</a>
+        </div>
         <header class="topbar">
           <div class="topbar-title" id="mode-title">CSV Batch Analysis</div>
           <div class="topbar-status">
@@ -236,6 +243,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/uplot@1.6.31/dist/uPlot.iife.min.js"></script>
-    <script type="module" src="/js/main.js"></script>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>

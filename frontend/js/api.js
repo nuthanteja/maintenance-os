@@ -1,10 +1,21 @@
+import {
+  isPreviewMode,
+  MOCK_META,
+  mockBatchPredict,
+  MockStreamClient,
+} from "./mock.js";
+
+const PREVIEW = isPreviewMode();
+
 export async function fetchMeta() {
+  if (PREVIEW) return MOCK_META;
   const r = await fetch("/api/meta");
   if (!r.ok) throw new Error(`/api/meta returned ${r.status}`);
   return r.json();
 }
 
 export async function postBatchPredict(file, rpm) {
+  if (PREVIEW) return mockBatchPredict(file, rpm);
   const fd = new FormData();
   fd.append("file", file);
   fd.append("rpm", String(rpm));
@@ -20,7 +31,7 @@ export async function postBatchPredict(file, rpm) {
   return r.json();
 }
 
-export class StreamClient {
+class RealStreamClient {
   constructor() {
     this._ws = null;
     this._listeners = new Map();
@@ -78,3 +89,6 @@ export class StreamClient {
     }
   }
 }
+
+export const StreamClient = PREVIEW ? MockStreamClient : RealStreamClient;
+

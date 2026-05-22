@@ -3,6 +3,7 @@ import { setMetaPanel, resetHero } from "./hero.js";
 import { initBatchView } from "./batch_view.js";
 import { initStreamView } from "./stream_view.js";
 import { initHistory } from "./history.js";
+import { isPreviewMode } from "./mock.js";
 
 const MODE_TITLES = {
   batch: "CSV Batch Analysis",
@@ -11,6 +12,10 @@ const MODE_TITLES = {
 };
 
 async function bootstrap() {
+  if (isPreviewMode()) {
+    document.getElementById("preview-banner").hidden = false;
+  }
+
   try {
     const meta = await fetchMeta();
     setMetaPanel({ model_id: meta.model_id });
