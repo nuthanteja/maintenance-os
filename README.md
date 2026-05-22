@@ -1,6 +1,6 @@
 # Maintenance_OS
 
-**Live UI preview:** <https://nuthanteja.github.io/maintenance-os/> — static demo of the dashboard with synthetic predictions cycling through every severity (no backend required to view). For real inference, clone and run the FastAPI server locally.
+**Live UI preview:** <https://nuthanteja.github.io/maintenance-os/> · <https://teamdelta-ubs26.github.io/maintenance-os/> — static demo of the dashboard with synthetic predictions cycling through every severity (no backend required to view). For real inference, clone and run the FastAPI server locally.
 
 **Project report:** [`docs/Project_report_Team_Delta.pdf`](docs/Project_report_Team_Delta.pdf) — full writeup covering system design, modelling experiments, results, and the path from notebook to deployed product.
 
