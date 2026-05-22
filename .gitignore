@@ -21,6 +21,7 @@ env/
 # Large/runtime artifacts — keep models/*.joblib (committed for client clone-and-run)
 data/raw/
 data/processed/
+data/samples/*.jsonl
 *.pkl
 *.h5
 *.hdf5
