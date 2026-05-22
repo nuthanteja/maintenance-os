@@ -347,3 +347,9 @@ For production:
 - Add a `Dockerfile` (single-stage Python image is fine; the joblib + scipy + numba install dominates image size)
 - Set `PMOS_API_HOST=0.0.0.0`, configure CORS for the deployed frontend origin
 - Switch ingestor to `serial` for live sensors (or pipe MQTT/OPC-UA into a custom ingestor)
+
+---
+
+## Acknowledgements
+
+Built as a Student Data Science Consultant engagement for **Machinery Monitoring Systems, LLC**, in collaboration with the **Institute for Artificial Intelligence and Data Science**, University at Buffalo.
