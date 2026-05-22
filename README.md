@@ -2,6 +2,8 @@
 
 **Live UI preview:** <https://nuthanteja.github.io/maintenance-os/> — static demo of the dashboard with synthetic predictions cycling through every severity (no backend required to view). For real inference, clone and run the FastAPI server locally.
 
+**Project report:** [`docs/Project_report_Team_Delta.pdf`](docs/Project_report_Team_Delta.pdf) — full writeup covering system design, modelling experiments, results, and the path from notebook to deployed product.
+
 ---
 
 Vibration-based predictive maintenance system for rotary machinery — backend service plus operator dashboard. Loads a trained model bundle, ingests tri-axial accelerometer data (X/Y/Z @ 50 kHz, 1024-sample windows), and classifies machine state and severity in real time. Severity outputs map to **ISO 20816-3 Action Zones** (A/B/C/D).
@@ -154,6 +156,9 @@ frontend/                  static SPA (vanilla HTML + Tailwind-style CSS + uPlot
 models/                    serialized model bundles
   minirocket_pipeline.joblib
   model_card.yaml          input contract, classes, ISO mapping reference
+
+docs/                      project documentation
+  Project_report_Team_Delta.pdf    full project report (system design, experiments, results)
 
 tests/
   unit/                    predictor, pipeline, buffer, ISO mapping, ingestors
